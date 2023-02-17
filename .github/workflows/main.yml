@@ -1,0 +1,33 @@
+name: Good Morning
+on:
+  schedule:
+  - cron:  '30 23 * * *'
+  workflow_dispatch:
+
+jobs:
+  send_message:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v3
+      with:
+        ref: main
+
+    - name: sender
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        architecture: 'x64'
+    - run: pip install -r ./requirements.txt && python ./main.py
+
+    env:
+      APP_ID: ${{ secrets.APP_ID }}
+      APP_SECRET: ${{ secrets.APP_SECRET }}
+      TEMPLATE_ID: ${{ secrets.TEMPLATE_ID }}
+      USER_ID: ${{ secrets.USER_ID }}
+      USERB_ID: ${{ secrets.USERB_ID }}
+      START_DATE: ${{ secrets.START_DATE }}
+      BIRTHDAY: ${{ secrets.BIRTHDAY }}
+      CITY: ${{ secrets.CITY }}
+      CITY_B: ${{ secrets.CITY_B }}
