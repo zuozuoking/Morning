@@ -19,10 +19,14 @@ userb_id = os.environ["USERB_ID"]
 template_id = os.environ["TEMPLATE_ID"]
 
 
-utc_now = datetime.utcnow().replace(tzinfo=timezone.utc)
-beijing = timezone(timedelta(hours=8))
-beijing_now = utc_now.astimezone(beijing)
-today = beijing_now.now()
+def get_time():
+    utc_now = datetime.utcnow().replace(tzinfo=timezone.utc)
+    beijing = timezone(timedelta(hours=8))
+    beijing_now = utc_now.astimezone(beijing)
+    today = beijing_now.now()
+    return today
+
+today = get_time();
 
 def get_weather():
   url = "http://aider.meizu.com/app/weather/listWeather?cityIds=" + city
@@ -75,7 +79,7 @@ wea, temp_day,temp_night = get_weather()
 weab, tempb_day,tempb_night = get_weatherB()
 data = {"weather":{"value":wea},"temp_day":{"value":temp_day},"temp_night":{"value":temp_night},"clothes":{"value":get_clothes(), "color":get_random_color()},
         "weatherb":{"value":weab},"tempb_day":{"value":tempb_day},"tempb_night":{"value":tempb_night},"clothesb":{"value":get_clothesb(), "color":get_random_color()},
-        "today":{"value":today},"love_days":{"value":get_count()},"birthday_left":{"value":get_birthday()},"words":{"value":get_words(), "color":get_random_color()}}
+        "today":{"value":get_time()},"love_days":{"value":get_count()},"birthday_left":{"value":get_birthday()},"words":{"value":get_words(), "color":get_random_color()}}
 user_a = wm.send_template(user_id, template_id, data)
 user_b = wm.send_template(userb_id, template_id, data)
 print(user_a)
