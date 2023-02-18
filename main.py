@@ -26,14 +26,11 @@ class DateEncoder(json.JSONEncoder):
         else:
             return json.JSONEncoder.default(self, obj)
 
-def get_time():
-    utc_now = datetime.utcnow().replace(tzinfo=timezone.utc)
-    beijing = timezone(timedelta(hours=8))
-    beijing_now = utc_now.astimezone(beijing)
-    today = beijing_now.now()
-    return today
 
-today = get_time();
+utc_now = datetime.utcnow().replace(tzinfo=timezone.utc)
+beijing = timezone(timedelta(hours=8))
+beijing_now = utc_now.astimezone(beijing)
+today = beijing_now.now()
 clock = json.dumps(today, cls=DateEncoder)
 
 def get_weather():
