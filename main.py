@@ -18,6 +18,12 @@ user_id = os.environ["USER_ID"]
 userb_id = os.environ["USERB_ID"]
 template_id = os.environ["TEMPLATE_ID"]
 
+class DateEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, datetime):
+            return obj.strftime("%Y-%m-%d %H:%M:%S")
+        else:
+            return json.JSONEncoder.default(self, obj)
 
 def get_time():
     utc_now = datetime.utcnow().replace(tzinfo=timezone.utc)
@@ -27,6 +33,7 @@ def get_time():
     return today
 
 today = get_time();
+clock = json.dumps(today, cls=DateEncoder)
 
 def get_weather():
   url = "http://aider.meizu.com/app/weather/listWeather?cityIds=" + city
@@ -79,7 +86,7 @@ wea, temp_day,temp_night = get_weather()
 weab, tempb_day,tempb_night = get_weatherB()
 data = {"weather":{"value":wea},"temp_day":{"value":temp_day},"temp_night":{"value":temp_night},"clothes":{"value":get_clothes(), "color":get_random_color()},
         "weatherb":{"value":weab},"tempb_day":{"value":tempb_day},"tempb_night":{"value":tempb_night},"clothesb":{"value":get_clothesb(), "color":get_random_color()},
-        "today":{"value":get_time()},"love_days":{"value":get_count()},"birthday_left":{"value":get_birthday()},"words":{"value":get_words(), "color":get_random_color()}}
+        "today":{"value":clock},"love_days":{"value":get_count()},"birthday_left":{"value":get_birthday()},"words":{"value":get_words(), "color":get_random_color()}}
 user_a = wm.send_template(user_id, template_id, data)
 user_b = wm.send_template(userb_id, template_id, data)
 print(user_a)
