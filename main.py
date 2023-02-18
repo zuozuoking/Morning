@@ -27,10 +27,8 @@ class DateEncoder(json.JSONEncoder):
             return json.JSONEncoder.default(self, obj)
 
 
-utc_now = datetime.utcnow().replace(tzinfo=timezone.utc)
-beijing = timezone(timedelta(hours=8))
-beijing_now = utc_now.astimezone(beijing)
-today = beijing_now.now()
+utc = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+today = (datetime.utcnow() + timedelta(hours=8)).strftime("%Y-%m-%d %H:%M:%S")
 clock = json.dumps(today, cls=DateEncoder)
 
 def get_weather():
