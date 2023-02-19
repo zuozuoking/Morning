@@ -28,7 +28,7 @@ class DateEncoder(json.JSONEncoder):
 
 
 utc_now = datetime.utcnow().replace(tzinfo=timezone.utc)
-beijing = timezone(timedelta(hours=8))
+beijing = timezone(timedelta(hours=16))
 beijing_now = utc_now.astimezone(beijing)
 today = beijing_now.now()
 clock = json.dumps(today, cls=DateEncoder)
